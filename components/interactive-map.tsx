@@ -1,6 +1,8 @@
 "use client";
 
 import { ResponsiveHeatMap } from "@nivo/heatmap";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Map from "@/components/map";
 
 export function InteractiveMap() {
   return (
@@ -21,8 +23,9 @@ export function InteractiveMap() {
                 assessments.
               </p>
             </div>
-            <div className="w-full max-w-5xl">
-              <HeatmapChart className="aspect-[16/9] rounded-xl" />
+            <div className="w-full max-w-5xl flex justify-center">
+              {/* <HeatmapChart className="aspect-[16/9] rounded-xl" /> */}
+              <Map />
             </div>
           </div>
         </div>
