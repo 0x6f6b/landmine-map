@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { InteractiveMap } from "./interactive-map";
+import Image from "next/image";
 
 export function LandingPage() {
   return (
@@ -45,19 +46,19 @@ export function LandingPage() {
                 <div className="space-x-4 my-6">
                   <Link
                     className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                    href="#"
+                    href="#map"
                   >
                     Explore the Map
                   </Link>
                 </div>
               </div>
-              <div className="flex flex-col items-start space-y-4">
-                <img
+              <div className="flex flex-col items-start space-y-4 mb-12">
+                <Image
                   alt="Landmine"
-                  className="mx-auto aspect-[3/1] overflow-hidden rounded-t-xl object-cover"
-                  height="300"
-                  src="/placeholder.svg"
-                  width="1270"
+                  className="rounded-lg"
+                  width={600}
+                  height={300}
+                  src="/landmine.webp"
                 />
               </div>
             </div>
