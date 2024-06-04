@@ -1,34 +1,76 @@
 "use client";
+import GoogleMapReact from "google-map-react";
+import utmObj from "utm-latlng";
 
-// START: Preserve spaces to avoid auto-sorting
-import "leaflet/dist/leaflet.css";
+import { features } from "../dataset.json";
 
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
+const utm = new utmObj();
 
-import "leaflet-defaulticon-compatibility";
-// END: Preserve spaces to avoid auto-sorting
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+interface AnyReactComponentProps {
+  key: number;
+  lat: number;
+  lng: number;
+  text: string | null;
+}
+
+const AnyReactComponent = ({ text }: AnyReactComponentProps) => (
+  <div
+    style={{
+      backgroundColor: "red",
+      color: "white",
+      height: 25,
+      width: 25,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 50,
+    }}
+  >
+    {text}
+  </div>
+);
 
 const Map = () => {
   return (
-    <MapContainer
-      preferCanvas={true}
-      center={[12.5657, 104.991]}
-      zoom={6}
-      scrollWheelZoom={true}
-      style={{ height: "500px", width: "700px" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>
-          This Marker icon is displayed correctly with{" "}
-          <i>leaflet-defaulticon-compatibility</i>.
-        </Popup>
-      </Marker>
-    </MapContainer>
+    <div style={{ height: "100vh", width: "90%" }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{
+          key: process.env.NEXT_PUBLIC_GOOGLE_MAPS as string,
+        }}
+        defaultCenter={{
+          lat: 12.5657,
+          lng: 104.991,
+        }}
+        defaultZoom={7}
+      >
+        {features.map((feature) => (
+          <AnyReactComponent
+            key={feature.properties.IncidentID}
+            lat={
+              (
+                utm.convertUtmToLatLng(
+                  feature.geometry.coordinates[1],
+                  feature.geometry.coordinates[0],
+                  48,
+                  "N"
+                ) as { lat: number; lng: number }
+              ).lat
+            }
+            lng={
+              (
+                utm.convertUtmToLatLng(
+                  feature.geometry.coordinates[1],
+                  feature.geometry.coordinates[0],
+                  48,
+                  "N"
+                ) as { lat: number; lng: number }
+              ).lng
+            }
+            text={feature.properties.MINE_TYPE}
+          />
+        ))}
+      </GoogleMapReact>
+    </div>
   );
 };
 
