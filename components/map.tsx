@@ -49,8 +49,8 @@ const Map = () => {
             lat={
               (
                 utm.convertUtmToLatLng(
-                  feature.geometry.coordinates[1],
                   feature.geometry.coordinates[0],
+                  feature.geometry.coordinates[1],
                   48,
                   "N"
                 ) as { lat: number; lng: number }
@@ -59,8 +59,8 @@ const Map = () => {
             lng={
               (
                 utm.convertUtmToLatLng(
-                  feature.geometry.coordinates[1],
                   feature.geometry.coordinates[0],
+                  feature.geometry.coordinates[1],
                   48,
                   "N"
                 ) as { lat: number; lng: number }
