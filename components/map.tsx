@@ -1,52 +1,38 @@
 "use client";
-import GoogleMapReact from "google-map-react";
+import { Marker } from "react-leaflet";
 import GoogleMap from "google-maps-react-markers";
 
 import utmObj from "utm-latlng";
 
 import { features } from "../dataset.json";
-import { RefAttributes, useRef, useState } from "react";
-import { LucideProps, MapPin } from "lucide-react";
+import { useRef, useState } from "react";
+import { Bomb, MapPin } from "lucide-react";
 
 const utm = new utmObj();
 
-interface MapPinProps
-  extends Omit<LucideProps, "ref">,
-    RefAttributes<SVGSVGElement> {
+interface AnyReactComponentProps {
+  key: number;
   lat: number;
   lng: number;
-  markerId: string;
-  coordinates: number[];
+  text: string | null;
 }
 
-const Marker: React.FC<MapPinProps> = ({
-  lat,
-  lng,
-  markerId,
-  coordinates,
-  ...props
-}) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const mineLocations = utm.convertUtmToLatLng(
-    coordinates[0],
-    coordinates[1],
-    48,
-    "N"
-  ) as { lat: number; lng: number };
-
-  return (
-    <MapPin
-      id={markerId}
-      lat={lat}
-      lng={lng}
-      onMouseOver={() => setIsHovered(true)}
-      onMouseOut={() => setIsHovered(false)}
-      {...props}
-    />
-  );
-};
+const AnyReactComponent = ({ text }: AnyReactComponentProps) => <MapPin />;
 
 const Map = () => {
+  const mapRef = useRef(null);
+  const [mapReady, setMapReady] = useState(false);
+
+  /**
+   * @description This function is called when the map is ready
+   * @param {Object} map - reference to the map instance
+   * @param {Object} maps - reference to the maps library
+   */
+  const onGoogleApiLoaded = ({ map, maps }: { map: any; maps: any }) => {
+    mapRef.current = map;
+    setMapReady(true);
+  };
+
   const onMarkerClick = (
     e: any,
     {
@@ -55,8 +41,8 @@ const Map = () => {
       lng,
     }: {
       markerId: any;
-      lat: number;
-      lng: number;
+      lat: any;
+      lng: any;
     }
   ) => {
     console.log("This is ->", markerId);
@@ -66,19 +52,39 @@ const Map = () => {
     <div style={{ height: "80vh", width: "90%" }}>
       <GoogleMap
         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS as string}
-        defaultCenter={{ lat: 12.5657, lng: 104.991 }}
+        defaultCenter={{
+          lat: 12.5657,
+          lng: 104.991,
+        }}
         defaultZoom={7}
         mapMinHeight="80vh"
-        // onGoogleApiLoaded={onGoogleApiLoaded}
+        onGoogleApiLoaded={onGoogleApiLoaded}
         onChange={(map) => console.log("Map moved", map)}
       >
         {features.map((feature) => (
-          <Marker
+          <AnyReactComponent
             key={feature.properties.IncidentID}
-            coordinates={feature.geometry.coordinates}
-            markerId={feature.properties.IncidentID.toString()}
-            lat={feature.geometry.coordinates[1]} // assuming this is latitude
-            lng={feature.geometry.coordinates[0]} // assuming this is longitude
+            lat={
+              (
+                utm.convertUtmToLatLng(
+                  feature.geometry.coordinates[0],
+                  feature.geometry.coordinates[1],
+                  48,
+                  "N"
+                ) as { lat: number; lng: number }
+              ).lat
+            }
+            lng={
+              (
+                utm.convertUtmToLatLng(
+                  feature.geometry.coordinates[0],
+                  feature.geometry.coordinates[1],
+                  48,
+                  "N"
+                ) as { lat: number; lng: number }
+              ).lng
+            }
+            text={feature.properties.MINE_TYPE}
           />
         ))}
       </GoogleMap>
