@@ -23,12 +23,12 @@ interface AnyReactComponentProps {
   text: string | null;
 }
 
-const AnyReactComponent = ({ text }: AnyReactComponentProps) => (
-  <HoverCard>
+const AnyReactComponent = ({ mineType }: any) => (
+  <HoverCard openDelay={0}>
     <HoverCardTrigger>
       <MapPin />
     </HoverCardTrigger>
-    <HoverCardContent>Mine Type: {text}</HoverCardContent>
+    <HoverCardContent>Mine Type: {mineType}</HoverCardContent>
   </HoverCard>
 );
 
@@ -97,7 +97,7 @@ const Map = () => {
                 ) as { lat: number; lng: number }
               ).lng
             }
-            text={feature.properties.MINE_TYPE}
+            mineType={feature.properties.MINE_TYPE || "Unknown"}
           />
         ))}
       </GoogleMap>
