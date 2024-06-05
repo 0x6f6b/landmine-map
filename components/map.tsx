@@ -6,7 +6,13 @@ import utmObj from "utm-latlng";
 
 import { features } from "../dataset.json";
 import { useRef, useState } from "react";
-import { Bomb, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
+
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const utm = new utmObj();
 
@@ -17,7 +23,14 @@ interface AnyReactComponentProps {
   text: string | null;
 }
 
-const AnyReactComponent = ({ text }: AnyReactComponentProps) => <MapPin />;
+const AnyReactComponent = ({ text }: AnyReactComponentProps) => (
+  <HoverCard>
+    <HoverCardTrigger>
+      <MapPin />
+    </HoverCardTrigger>
+    <HoverCardContent>Mine Type: {text}</HoverCardContent>
+  </HoverCard>
+);
 
 const Map = () => {
   const mapRef = useRef(null);
