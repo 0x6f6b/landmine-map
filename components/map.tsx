@@ -1,11 +1,12 @@
 "use client";
-import GoogleMapReact from "google-map-react";
+import { Marker } from "react-leaflet";
 import GoogleMap from "google-maps-react-markers";
 
 import utmObj from "utm-latlng";
 
 import { features } from "../dataset.json";
 import { useRef, useState } from "react";
+import { Bomb, MapPin } from "lucide-react";
 
 const utm = new utmObj();
 
@@ -16,22 +17,7 @@ interface AnyReactComponentProps {
   text: string | null;
 }
 
-const AnyReactComponent = ({ text }: AnyReactComponentProps) => (
-  <div
-    style={{
-      backgroundColor: "red",
-      color: "white",
-      height: 25,
-      width: 25,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      borderRadius: 50,
-    }}
-  >
-    {text}
-  </div>
-);
+const AnyReactComponent = ({ text }: AnyReactComponentProps) => <MapPin />;
 
 const Map = () => {
   const mapRef = useRef(null);
