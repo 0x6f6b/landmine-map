@@ -15,8 +15,8 @@ interface MapPinProps
     RefAttributes<SVGSVGElement> {
   lat: number;
   lng: number;
-  markerId?: string;
-  coordinates: [number, number];
+  markerId: string;
+  coordinates: number[];
 }
 
 const Marker: React.FC<MapPinProps> = ({
@@ -36,7 +36,7 @@ const Marker: React.FC<MapPinProps> = ({
 
   return (
     <MapPin
-      markerId={markerId as string}
+      id={markerId}
       lat={lat}
       lng={lng}
       onMouseOver={() => setIsHovered(true)}
@@ -73,10 +73,12 @@ const Map = () => {
         onChange={(map) => console.log("Map moved", map)}
       >
         {features.map((feature) => (
-          <MapPin
+          <Marker
             key={feature.properties.IncidentID}
             coordinates={feature.geometry.coordinates}
-            markerId={feature.properties.IncidentID}
+            markerId={feature.properties.IncidentID.toString()}
+            lat={feature.geometry.coordinates[1]} // assuming this is latitude
+            lng={feature.geometry.coordinates[0]} // assuming this is longitude
           />
         ))}
       </GoogleMap>
