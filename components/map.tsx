@@ -1,10 +1,5 @@
 "use client";
-import { Marker } from "react-leaflet";
 import GoogleMap from "google-maps-react-markers";
-
-import utmObj from "utm-latlng";
-
-import { features } from "../dataset.json";
 import { useRef, useState } from "react";
 import { MapPin } from "lucide-react";
 
@@ -14,25 +9,52 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-const utm = new utmObj();
-
-interface AnyReactComponentProps {
-  key: number;
+const AnyReactComponent = ({
+  mineType,
+  landUse,
+  killed,
+  date,
+  lat,
+  lng,
+}: {
+  mineType: string | null;
+  landUse: string | null;
+  killed: number;
+  date: Date;
   lat: number;
   lng: number;
-  text: string | null;
-}
-
-const AnyReactComponent = ({ mineType }: any) => (
+}) => (
   <HoverCard openDelay={0}>
     <HoverCardTrigger>
       <MapPin />
     </HoverCardTrigger>
-    <HoverCardContent>Mine Type: {mineType}</HoverCardContent>
+    <HoverCardContent>
+      <div>
+        {mineType && <h3 className="text-base font-bold">{mineType}</h3>}
+        {landUse && landUse !== "Unknown" && (
+          <p className="text-sm">{landUse}</p>
+        )}
+        <p className="text-sm">
+          {killed} killed on {date.toLocaleDateString()}
+        </p>
+      </div>
+    </HoverCardContent>
   </HoverCard>
 );
 
-const Map = () => {
+const Map = ({
+  landmines,
+}: {
+  landmines: {
+    id: string;
+    type: string | null;
+    lat: number;
+    lng: number;
+    landUse: string | null;
+    killed: number;
+    date: Date;
+  }[];
+}) => {
   const mapRef = useRef(null);
   const [mapReady, setMapReady] = useState(false);
 
@@ -44,21 +66,6 @@ const Map = () => {
   const onGoogleApiLoaded = ({ map, maps }: { map: any; maps: any }) => {
     mapRef.current = map;
     setMapReady(true);
-  };
-
-  const onMarkerClick = (
-    e: any,
-    {
-      markerId,
-      lat,
-      lng,
-    }: {
-      markerId: any;
-      lat: any;
-      lng: any;
-    }
-  ) => {
-    console.log("This is ->", markerId);
   };
 
   return (
@@ -74,30 +81,15 @@ const Map = () => {
         onGoogleApiLoaded={onGoogleApiLoaded}
         onChange={(map) => console.log("Map moved", map)}
       >
-        {features.map((feature) => (
+        {landmines.map((landmine) => (
           <AnyReactComponent
-            key={feature.properties.IncidentID}
-            lat={
-              (
-                utm.convertUtmToLatLng(
-                  feature.geometry.coordinates[0],
-                  feature.geometry.coordinates[1],
-                  48,
-                  "N"
-                ) as { lat: number; lng: number }
-              ).lat
-            }
-            lng={
-              (
-                utm.convertUtmToLatLng(
-                  feature.geometry.coordinates[0],
-                  feature.geometry.coordinates[1],
-                  48,
-                  "N"
-                ) as { lat: number; lng: number }
-              ).lng
-            }
-            mineType={feature.properties.MINE_TYPE || "Unknown"}
+            key={landmine.id}
+            lat={landmine.lat}
+            lng={landmine.lng}
+            mineType={landmine.type}
+            landUse={landmine.landUse}
+            killed={landmine.killed}
+            date={landmine.date}
           />
         ))}
       </GoogleMap>
