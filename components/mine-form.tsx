@@ -15,6 +15,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useState } from "react";
+import { useToast } from "./ui/use-toast";
 
 const formSchema = z.object({
   name: z.string(),
@@ -24,20 +26,36 @@ const formSchema = z.object({
 });
 
 const MineForm = () => {
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+  const { toast } = useToast();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     console.log(values);
 
-    await fetch("/api/report", {
+    const res = await fetch("/api/report", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(values),
     });
+
+    setLoading(false);
+
+    if (res.status === 200) {
+      toast({
+        description: "Your report has been submitted",
+      });
+    } else {
+      toast({
+        description: "An error occurred. Please try again later",
+      });
+    }
   }
 
   return (
@@ -109,8 +127,8 @@ const MineForm = () => {
             />
           </div>
         </div>
-        <Button type="submit" className="w-full">
-          Submit
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Loading..." : "Submit"}
         </Button>
       </form>
     </Form>
