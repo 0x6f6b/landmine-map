@@ -3404,3 +3404,7 @@
 
 //   return Response.json(200);
 // }
+
+export async function GET(req: Request) {
+  return Response.json(200);
+}
