@@ -134,7 +134,6 @@ const Map = ({
         defaultZoom={7}
         mapMinHeight="80vh"
         onGoogleApiLoaded={onGoogleApiLoaded}
-        onChange={(map) => console.log("Map moved", map)}
       >
         {seedLandmines.map((landmine) => (
           <SeedLandmine
