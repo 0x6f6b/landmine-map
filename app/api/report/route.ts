@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 import { createTransport } from "nodemailer";
 
 const prisma = new PrismaClient();
@@ -62,6 +63,8 @@ export async function POST(req: Request) {
       console.log("Email sent:", info.response);
     }
   });
+
+  revalidatePath("/");
 
   return new Response(null, { status: 200 });
 }
