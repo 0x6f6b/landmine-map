@@ -3,36 +3,12 @@ import { InteractiveMap } from "./interactive-map";
 import Image from "next/image";
 import { Map } from "lucide-react";
 import { Button } from "./ui/button";
+import Header from "./header";
 
 export function LandingPage() {
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <header className="px-4 lg:px-6 h-14 flex items-center">
-        <Link className="flex items-center justify-center" href="#">
-          <Map className="h-6 w-6" />
-          <span className="sr-only">Landmine Map</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
-          >
-            About
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
-          >
-            Methodology
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
-          >
-            Get Involved
-          </Link>
-        </nav>
-      </header>
+      <Header />
       <main className="flex-1">
         <section className="w-full pt-12 md:pt-24 lg:pt-32 border-y">
           <div className="px-4 md:px-6 space-y-10 xl:space-y-16">
@@ -43,7 +19,7 @@ export function LandingPage() {
                 </h1>
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
                   Explore an interactive map of likely landmine locations in
-                  Cambodia, powered by public datasets and advanced analytics.
+                  Cambodia, powered by public datasets and user reports.
                 </p>
                 <div className="space-x-4 my-6">
                   <Link
@@ -80,11 +56,9 @@ export function LandingPage() {
                   Leveraging Public Datasets
                 </h2>
                 <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Our interactive map is powered by a combination of public
-                  datasets, including historical landmine incident reports,
-                  satellite imagery, and geographic data. We&apos;ve combined
-                  these sources to create a comprehensive view of the landmine
-                  crisis in Cambodia.
+                  We use a combination of publicly available data sources and
+                  direct user reports to identify and map landmine hotspots in
+                  Cambodia.
                 </p>
               </div>
             </div>
@@ -93,22 +67,22 @@ export function LandingPage() {
                 <h3 className="text-lg font-bold">Incident Reports</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   We&apos;ve aggregated historical landmine incident reports
-                  from government and NGO sources to identify high-risk areas.
+                  from government sources to identify minefields.
                 </p>
               </div>
               <div className="grid gap-1">
-                <h3 className="text-lg font-bold">Satellite Imagery</h3>
+                <h3 className="text-lg font-bold">Transparent Data</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  By analyzing high-resolution satellite imagery, we can detect
-                  signs of landmine activity and potential contamination.
+                  All information used to plot mine data is publicly available
+                  and is listed in our methodology page
                 </p>
               </div>
               <div className="grid gap-1">
-                <h3 className="text-lg font-bold">Geographic Data</h3>
+                <h3 className="text-lg font-bold">User Input</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  We incorporate geographic data on terrain, infrastructure, and
-                  population centers to model the likely distribution of
-                  landmines.
+                  Not all landmine locations are known to the authorities. Users
+                  are able to report mines directly on the website to help us
+                  improve our data.
                 </p>
               </div>
             </div>
@@ -118,16 +92,8 @@ export function LandingPage() {
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          © 2024 Landmine Map. All rights reserved.
+          © 2024 Group 38. All rights reserved.
         </p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy Policy
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
-          </Link>
-        </nav>
       </footer>
     </div>
   );

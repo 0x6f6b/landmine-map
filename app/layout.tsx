@@ -11,7 +11,7 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "Landmine Map",
-  description: "Interactive map of likely landmine locations in Cambodia",
+  description: "Interactive map of landmine locations in Cambodia",
 };
 
 export default function RootLayout({
