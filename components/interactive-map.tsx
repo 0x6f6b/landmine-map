@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 export async function InteractiveMap() {
   const landmineReports = await prisma.landmineReport.findMany();
+  console.log(landmineReports);
   const landmines = await prisma.landmine.findMany();
 
   const reportedLandmines = landmines.filter((landmine) =>
