@@ -4,7 +4,40 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function InteractiveMap() {
+  const landmineReports = await prisma.landmineReport.findMany();
   const landmines = await prisma.landmine.findMany();
+
+  const reportedLandmines = landmines.filter((landmine) =>
+    landmineReports.some((report) => report.landmineId === landmine.id)
+  );
+
+  // add reportedBy field to reportedLandmines
+  const userLandmines = await Promise.all(
+    reportedLandmines.map(async (landmine) => {
+      const user = landmineReports.find(
+        (report) => report.landmineId === landmine.id
+      )?.userId;
+
+      const userObj = await prisma.user.findUnique({
+        where: {
+          uid: user,
+        },
+      });
+
+      return {
+        ...landmine,
+        reportedBy: userObj || {
+          uid: "",
+          email: "",
+          name: "",
+        },
+      };
+    })
+  );
+
+  const seedLandmines = landmines.filter(
+    (landmine) => !reportedLandmines.includes(landmine)
+  );
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
@@ -26,7 +59,10 @@ export async function InteractiveMap() {
             </div>
             <div className="w-full max-w-5xl flex justify-center">
               {/* <HeatmapChart className="aspect-[16/9] rounded-xl" /> */}
-              <Map landmines={landmines} />
+              <Map
+                userLandmines={userLandmines}
+                seedLandmines={seedLandmines}
+              />
             </div>
           </div>
         </div>

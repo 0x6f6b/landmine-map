@@ -1,7 +1,6 @@
 "use client";
 import GoogleMap from "google-maps-react-markers";
 import { useRef, useState } from "react";
-import { MapPin } from "lucide-react";
 
 import {
   HoverCard,
@@ -9,7 +8,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-const AnyReactComponent = ({
+const SeedLandmine = ({
   mineType,
   landUse,
   killed,
@@ -24,7 +23,7 @@ const AnyReactComponent = ({
   lat: number;
   lng: number;
 }) => (
-  <HoverCard openDelay={0}>
+  <HoverCard openDelay={250}>
     <HoverCardTrigger>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -50,10 +49,58 @@ const AnyReactComponent = ({
   </HoverCard>
 );
 
-const Map = ({
-  landmines,
+const UserLandmine = ({
+  reportedBy,
+  date,
+  lat,
+  lng,
 }: {
-  landmines: {
+  reportedBy: string;
+  date: Date;
+  lat: number;
+  lng: number;
+}) => (
+  <HoverCard openDelay={250}>
+    <HoverCardTrigger>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="3d8c40"
+      >
+        <path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 400Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z" />
+      </svg>
+    </HoverCardTrigger>
+    <HoverCardContent>
+      <div>
+        <h3 className="text-base font-bold">Reported by {reportedBy}</h3>
+        <p className="text-sm">Reported on {date.toLocaleDateString()}</p>
+      </div>
+    </HoverCardContent>
+  </HoverCard>
+);
+
+const Map = ({
+  userLandmines,
+  seedLandmines,
+}: {
+  userLandmines: {
+    reportedBy: {
+      uid: string;
+      email: string;
+      name: string;
+    };
+    id: string;
+    type: string | null;
+    lat: number;
+    lng: number;
+    landUse: string | null;
+    killed: number;
+    date: Date;
+  }[];
+
+  seedLandmines: {
     id: string;
     type: string | null;
     lat: number;
@@ -89,14 +136,23 @@ const Map = ({
         onGoogleApiLoaded={onGoogleApiLoaded}
         onChange={(map) => console.log("Map moved", map)}
       >
-        {landmines.map((landmine) => (
-          <AnyReactComponent
+        {seedLandmines.map((landmine) => (
+          <SeedLandmine
             key={landmine.id}
             lat={landmine.lat}
             lng={landmine.lng}
             mineType={landmine.type}
             landUse={landmine.landUse}
             killed={landmine.killed}
+            date={landmine.date}
+          />
+        ))}
+        {userLandmines.map((landmine) => (
+          <UserLandmine
+            key={landmine.id}
+            lat={landmine.lat}
+            lng={landmine.lng}
+            reportedBy={landmine.reportedBy.name}
             date={landmine.date}
           />
         ))}
