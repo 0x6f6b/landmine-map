@@ -4,7 +4,7 @@ export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <Header />
-      <section className="w-full px-24 pt-8 md:pt-16 lg:pt-24">
+      <section className="w-full px-24 pt-8 md:pt-16 lg:pt-24 border-t">
         <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
           About Us
         </h1>

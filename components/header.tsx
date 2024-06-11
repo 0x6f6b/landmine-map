@@ -4,9 +4,12 @@ import { Map } from "lucide-react";
 export default function Header() {
   return (
     <header className="px-4 lg:px-6 h-14 flex items-center">
-      <Link className="flex items-center justify-center" href="/">
+      <Link
+        className="flex items-center justify-center text-xl font-bold hover:underline gap-1"
+        href="/"
+      >
         <Map className="h-6 w-6" />
-        <span className="sr-only">Landmine Map</span>
+        Landmine Map
       </Link>
       <nav className="ml-auto flex gap-4 sm:gap-6">
         <Link
