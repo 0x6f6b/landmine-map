@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   description: "Interactive map of landmine locations in Cambodia",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RootLayout({
   children,
 }: Readonly<{
