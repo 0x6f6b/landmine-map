@@ -21,12 +21,6 @@ export default function Header() {
         >
           Methodology
         </Link>
-        <Link
-          className="text-sm font-medium hover:underline underline-offset-4"
-          href="#"
-        >
-          Get Involved
-        </Link>
       </nav>
     </header>
   );
