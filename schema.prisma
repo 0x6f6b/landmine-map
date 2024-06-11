@@ -14,11 +14,30 @@ datasource db {
 }
 
 model Landmine {
-  id      String   @id @default(cuid())
-  type    String?
-  lat     Float
-  lng     Float
-  landUse String?
-  killed  Int
-  date    DateTime
+  id             String           @id @default(cuid())
+  type           String?
+  lat            Float
+  lng            Float
+  landUse        String?
+  killed         Int
+  date           DateTime         @default(now())
+  LandmineReport LandmineReport[]
+}
+
+model User {
+  uid            String           @id @default(cuid())
+  email          String           @unique
+  name           String
+  LandmineReport LandmineReport[]
+}
+
+model LandmineReport {
+  id         String   @id @default(cuid())
+  userId     String
+  landmineId String
+  reportDate DateTime @default(now())
+  comment    String?
+
+  user     User     @relation(fields: [userId], references: [uid])
+  landmine Landmine @relation(fields: [landmineId], references: [id])
 }

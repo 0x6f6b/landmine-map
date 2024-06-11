@@ -2,6 +2,7 @@ import Link from "next/link";
 import { InteractiveMap } from "./interactive-map";
 import Image from "next/image";
 import { Map } from "lucide-react";
+import { Button } from "./ui/button";
 
 export function LandingPage() {
   return (
@@ -51,6 +52,9 @@ export function LandingPage() {
                   >
                     Explore the Map
                   </Link>
+                  <Button variant="outline" asChild>
+                    <Link href="/report">Report Landmine</Link>
+                  </Button>
                 </div>
               </div>
               <div className="flex flex-col items-start space-y-4 mb-12">

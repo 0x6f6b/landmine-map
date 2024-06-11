@@ -3356,6 +3356,9 @@ const features = [
 const prisma = new PrismaClient();
 
 export async function GET(req: Request) {
+  // Clear the landmine table
+  await prisma.landmine.deleteMany();
+
   for (const feature of features) {
     const coordinates = utm.convertUtmToLatLng(
       feature.geometry.coordinates[0],
@@ -3363,6 +3366,29 @@ export async function GET(req: Request) {
       48,
       "N"
     ) as { lat: number; lng: number };
+
+    // If coordinates are too close to eachother, skip (just so the example data doesn't have duplicates or near-duplicates)
+    const existingLandmine = await prisma.landmine.findFirst({
+      where: {
+        lat: {
+          gte: coordinates.lat - 0.1,
+          lte: coordinates.lat + 0.1,
+        },
+        lng: {
+          gte: coordinates.lng - 0.1,
+          lte: coordinates.lng + 0.1,
+        },
+      },
+    });
+
+    if (existingLandmine) {
+      console.log(
+        "Skipping",
+        feature.properties.IncidentID,
+        "because it's too close to another landmine"
+      );
+      continue;
+    }
 
     await prisma.landmine.create({
       data: {
